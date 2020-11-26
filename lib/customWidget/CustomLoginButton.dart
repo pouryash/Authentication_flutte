@@ -4,8 +4,9 @@ import 'package:flutter_note/values/Colors.dart';
 class CustomLoginButton extends StatelessWidget {
   final hasBorder;
   final name;
+  final onButtonTap;
 
-  CustomLoginButton({this.name, this.hasBorder});
+  CustomLoginButton({this.name, this.hasBorder, this.onButtonTap()});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,9 @@ class CustomLoginButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         customBorder:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        onTap: () {},
+        onTap: () {
+          onButtonTap();
+        },
         child: Container(
           width: double.infinity,
           height: 50,

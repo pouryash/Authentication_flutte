@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_note/Home.dart';
 import 'package:flutter_note/main.dart';
 import 'values/Colors.dart';
 
@@ -11,6 +12,9 @@ class Splsh extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        '/login': (context) => MyApp(),
+      },
       debugShowCheckedModeBanner: false,
       title: 'splash',
       theme: ThemeData(
@@ -42,7 +46,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOutCubic);
     _controller.addStatusListener((status) {
       if(status == AnimationStatus.completed){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+        Navigator.pushReplacementNamed(context, "/login");
       }
     });
     super.initState();

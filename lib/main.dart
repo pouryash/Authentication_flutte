@@ -6,6 +6,8 @@ import 'package:flutter_note/customWidget/TextFiledCustom.dart';
 import 'package:flutter_note/values/Colors.dart';
 import 'package:flutter/services.dart';
 
+import 'Home.dart';
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,6 +15,9 @@ class MyApp extends StatelessWidget {
     //         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
     //     .then((value) => runApp(MyApp()));
     return MaterialApp(
+      routes: {
+        '/home': (context) => Home(),
+      },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -43,11 +48,36 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  bool isLogin = true;
+  String header = "Login";
+  var passwordController = TextEditingController();
+  var emailController = TextEditingController();
+  var nameController = TextEditingController();
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  @override
+  dispose(){
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   @override
@@ -67,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     borderRadius:
                         BorderRadius.vertical(bottom: Radius.circular(20))),
                 child: Text(
-                  "Login",
+                  header,
                   style: TextStyle(
                       color: white, fontSize: 30, fontFamily: "iranSans"),
                 ),
@@ -83,8 +113,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     TextFiledCustom(
                       label: "User Name",
                       hint: "Enter User Name",
-                      prefixIcon: Icons.email_outlined,
+                      prefixIcon: Icons.person_outline,
                       isObscure: false,
+                      controller: nameController,
+                    ),
+                    Visibility(
+                      visible: !isLogin,
+                      child: TextFiledCustom(
+                        label: "Email",
+                        hint: "Enter User Email",
+                        prefixIcon: Icons.email_outlined,
+                        isObscure: false,
+                        controller: emailController,
+                      ),
                     ),
                     TextFiledCustom(
                       label: "Password",
@@ -92,6 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       prefixIcon: Icons.lock,
                       isObscure: true,
                       suffixIcon: Icons.visibility_off,
+                      isLastOne: true,
+                      controller: passwordController,
                     ),
                     Container(
                       width: displayWidth(context),
@@ -106,16 +149,32 @@ class _MyHomePageState extends State<MyHomePage> {
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: CustomLoginButton(
-                        name: "Login",
+                        name: isLogin ? "Login" : "Sign Up",
                         hasBorder: false,
+                        onButtonTap: () {
+                          if(isLogin){
+                            if(nameController.text == "pourya" && passwordController.text == "1234")
+                              Navigator.pushReplacementNamed(context, "/home");
+                          }
+                        },
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: CustomLoginButton(
-                        name: "Sign Up",
-                        hasBorder: true,
-                      ),
+                          name: isLogin ? "Sign Up" : "Login",
+                          hasBorder: true,
+                          onButtonTap: () {
+                            setState(() {
+                              if(header == "Login"){
+                                isLogin = false;
+                                header = "Sign Up";
+                              }else{
+                                isLogin = true;
+                                header = "Login";
+                              }
+                            });
+                          }),
                     ),
                   ],
                 ),
